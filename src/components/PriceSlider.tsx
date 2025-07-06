@@ -1,15 +1,25 @@
 "use client";
 
 import { Range } from "react-range";
-import { useState, useEffect } from "react";
-import { useProducts } from "@/context/ProductsContext";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function PriceSlider() {
-  const { filters, setFilters } = useProducts();
-  const [values, setValues] = useState<[number, number]>(filters.priceRange);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const [values, setValues] = useState<[number, number]>(() => {
+    const fromUrl = searchParams.get("price")?.split("-").map(Number);
+    return fromUrl?.length === 2
+      ? ([fromUrl[0], fromUrl[1]] as [number, number])
+      : [0, 1000];
+  });
 
   useEffect(() => {
-    setFilters((prev) => ({ ...prev, priceRange: values }));
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("price", `${values[0]}-${values[1]}`);
+    router.replace(`${pathname}?${params.toString()}`);
   }, [values]);
 
   return (
@@ -19,7 +29,7 @@ export default function PriceSlider() {
       <Range
         step={10}
         min={0}
-        max={1000}
+        max={10000}
         values={values}
         onChange={(newValues) => setValues(newValues as [number, number])}
         renderTrack={({ props, children }) => (

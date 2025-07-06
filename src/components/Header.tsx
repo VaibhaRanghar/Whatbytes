@@ -1,11 +1,10 @@
 "use client";
 
-import { useProducts } from "@/context/ProductsContext";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BiCart, BiSearch } from "react-icons/bi";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-// 🔁 Reusable debounce hook
 function useDebounce<T>(value: T, delay = 500): T {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
@@ -18,11 +17,22 @@ function useDebounce<T>(value: T, delay = 500): T {
 function Header() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search);
-  const { setFilters } = useProducts();
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    setFilters((prev) => ({ ...prev, search: debouncedSearch }));
-  }, [debouncedSearch, setFilters]);
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (debouncedSearch) {
+      params.set("search", debouncedSearch);
+    } else {
+      params.delete("search");
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+  }, [debouncedSearch]);
 
   return (
     <header className="flex items-center justify-between gap-4 px-4 py-3 shadow-md bg-white sticky top-0 z-10">

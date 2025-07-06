@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PriceSlider from "./PriceSlider";
-import { useProducts } from "@/context/ProductsContext";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 function Category({
   type,
@@ -14,18 +14,29 @@ function Category({
   };
   categories: string[];
 }) {
-  const { setFilters } = useProducts();
   const [formFilters, setFormFilters] = useState<string[]>([]);
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const handleFilters = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (formFilters?.includes(e.target.value))
-      setFormFilters(formFilters.filter((c) => c != e.target.value));
-    else setFormFilters((prev) => [...prev, e.target.value]);
+    const { value } = e.target;
+    setFormFilters((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
   };
 
   useEffect(() => {
-    setFilters((prev) => ({ ...prev, categories: formFilters }));
-  }, [formFilters, setFilters]);
+    const params = new URLSearchParams(searchParams.toString());
+    if (formFilters.length > 0) {
+      params.set("category", formFilters.join(","));
+    } else {
+      params.delete("category");
+    }
+    router.replace(`${pathname}?${params.toString()}`);
+  }, [formFilters]);
+
   return (
     <form
       className={`min-w-40 flex flex-col gap-2 items-start ${

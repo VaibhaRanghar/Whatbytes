@@ -1,8 +1,11 @@
-"use client";
+// context/ProductsContext.tsx
+'use client';
 
-import { createContext, useContext, useEffect, useState } from "react";
-import mockProducts from "@/data/MockData";
-import { Product } from "@/components/ProductCard";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useSearchParams, usePathname } from 'next/navigation';
+import mockProducts from '@/data/MockData';
+import { Product } from '@/components/ProductCard';
+
 
 type PriceRange = [number, number];
 
@@ -16,51 +19,53 @@ interface ProductsContextType {
   products: Product[];
   filteredProducts: Product[];
   filters: FilterState;
-  setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
-  resetFilters: () => void;
 }
 
 const ProductsContext = createContext<ProductsContextType | null>(null);
 
-export const ProductsProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const ProductsProvider = ({ children }: { children: React.ReactNode }) => {
   const [products] = useState<Product[]>(mockProducts);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [filters, setFilters] = useState<FilterState>({
     categories: [],
     priceRange: [0, 1000],
-    search: "",
+    search: '',
   });
 
-  const resetFilters = () => {
-    setFilters({ categories: [], priceRange: [0, 10000], search: "" });
-  };
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const cat = searchParams.get('category')?.split(',') || [];
+    const search = searchParams.get('search') || '';
+    const priceParam = searchParams.get('price')?.split('-').map(Number);
+    const priceRange: PriceRange = priceParam?.length === 2 ? [priceParam[0], priceParam[1]] : [0, 1000];
+
+    const newFilters: FilterState = {
+      categories: cat,
+      priceRange,
+      search,
+    };
+    setFilters(newFilters);
+  }, [pathname, searchParams]);
 
   useEffect(() => {
     const [min, max] = filters.priceRange;
-    const categoriesToMatch = filters.categories.includes("All")
-      ? []
-      : filters.categories;
-    const search = filters.search?.toLowerCase();
+    const cats = filters.categories.includes('All') ? [] : filters.categories;
+    const searchText = filters.search.toLowerCase();
 
     const result = products.filter((p) => {
-      const matchCat =
-        !categoriesToMatch.length || categoriesToMatch.includes(p.category);
+      const matchCat = !cats.length || cats.includes(p.category);
       const matchPrice = p.price >= min && p.price <= max;
-      const matchSearch = p.title.toLowerCase().includes(search);
+      const matchSearch = p.title.toLowerCase().includes(searchText);
       return matchCat && matchPrice && matchSearch;
     });
 
     setFilteredProducts(result);
-  }, [products, filters]);
+  }, [filters, products]);
 
   return (
-    <ProductsContext.Provider
-      value={{ products, filteredProducts, filters, setFilters, resetFilters }}
-    >
+    <ProductsContext.Provider value={{ products, filteredProducts, filters }}>
       {children}
     </ProductsContext.Provider>
   );
@@ -68,6 +73,6 @@ export const ProductsProvider = ({
 
 export const useProducts = () => {
   const ctx = useContext(ProductsContext);
-  if (!ctx) throw new Error("useProducts must be used within ProductsProvider");
+  if (!ctx) throw new Error('useProducts must be used within ProductsProvider');
   return ctx;
 };
