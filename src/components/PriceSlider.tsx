@@ -16,7 +16,7 @@ export default function PriceSlider() {
 
   return (
     <div className="">
-      <p className="">Price</p>
+      <h3 className="font-semibold my-2">Price</h3>
 
       <Range
         step={10}
@@ -24,18 +24,27 @@ export default function PriceSlider() {
         max={1000}
         values={values}
         onChange={setValues}
-        renderTrack={({ props, children }) => (
-          <div
-            {...props}
-            className="h-1 w-20 bg-blue-200 rounded relative"
-            style={{ ...props.style }}
-          >
-            {children}
-          </div>
-        )}
-        renderThumb={({ props }) => (
-          <div {...props} className="w-3 h-3 bg-white rounded-full shadow " />
-        )}
+        renderTrack={({ props, children }) => {
+          return (
+            <div
+              {...props}
+              className="h-1 min-w-40 ml-1 bg-blue-200 rounded relative"
+              style={{ ...props.style }}
+            >
+              {children}
+            </div>
+          );
+        }}
+        renderThumb={({ props }) => {
+          const { key, ...rest } = props;
+          return (
+            <div
+              key={key}
+              {...rest}
+              className="w-3 h-3 ml-1 bg-white rounded-full shadow "
+            />
+          );
+        }}
       />
 
       <div className="flex justify-between mt-2 ">
