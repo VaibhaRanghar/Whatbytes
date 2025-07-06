@@ -1,26 +1,52 @@
+"use client";
+
+import { useProducts } from "@/context/ProductsContext";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BiCart, BiSearch } from "react-icons/bi";
 
+// 🔁 Reusable debounce hook
+function useDebounce<T>(value: T, delay = 500): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debounced;
+}
+
 function Header() {
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
+  const { setFilters } = useProducts();
+
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, search: debouncedSearch }));
+  }, [debouncedSearch, setFilters]);
+
   return (
-    <header>
-      <h1>Logo</h1>
-      <div className="relative sm:w-sm flex border-1  border-slate-400 rounded-lg">
+    <header className="flex items-center justify-between gap-4 px-4 py-3 shadow-md bg-white sticky top-0 z-10">
+      <h1 className="text-xl font-bold ">LOGO</h1>
+
+      <div className="relative flex-grow max-w-sm">
         <BiSearch
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
           size={20}
         />
         <input
           type="text"
-          name="searchBar"
-          id="searchBar"
-          placeholder="Search for products"
-          className="p-2 pl-12 min-w-full"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search products..."
+          className="w-full p-2 pl-10 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <Link href={"/cart"} className="flex items-center gap-2 scale-100 sm:scale-110 bg-blue-950 px-3 sm:px-5 py-1 rounded-md">
-        <BiCart /> Cart
+
+      <Link
+        href="/cart"
+        className="flex items-center gap-2 px-4 py-2 bg-blue-950 text-white rounded-md hover:bg-blue-800 transition"
+      >
+        <BiCart size={20} /> <span className="hidden sm:inline">Cart</span>
       </Link>
     </header>
   );

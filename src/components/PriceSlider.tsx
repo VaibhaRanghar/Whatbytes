@@ -1,21 +1,19 @@
 "use client";
-import { Range } from "react-range";
-import { useState } from "react";
 
-const items = [
-  { name: "Speaker", price: 200 },
-  { name: "DJ Lights", price: 500 },
-  { name: "Performer", price: 800 },
-  { name: "Stage Setup", price: 1000 },
-];
+import { Range } from "react-range";
+import { useState, useEffect } from "react";
+import { useProducts } from "@/context/ProductsContext";
 
 export default function PriceSlider() {
-  const [values, setValues] = useState([0, 1000]);
+  const { filters, setFilters } = useProducts();
+  const [values, setValues] = useState<[number, number]>(filters.priceRange);
 
-  console.log(items);
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, priceRange: values }));
+  }, [values]);
 
   return (
-    <div className="">
+    <div>
       <h3 className="font-semibold my-2">Price</h3>
 
       <Range
@@ -23,33 +21,31 @@ export default function PriceSlider() {
         min={0}
         max={1000}
         values={values}
-        onChange={setValues}
-        renderTrack={({ props, children }) => {
-          return (
-            <div
-              {...props}
-              className="h-1 min-w-40 ml-1 bg-blue-200 rounded relative"
-              style={{ ...props.style }}
-            >
-              {children}
-            </div>
-          );
-        }}
+        onChange={(newValues) => setValues(newValues as [number, number])}
+        renderTrack={({ props, children }) => (
+          <div
+            {...props}
+            className="h-1 min-w-40 ml-1 bg-blue-200 rounded relative"
+            style={{ ...props.style }}
+          >
+            {children}
+          </div>
+        )}
         renderThumb={({ props }) => {
           const { key, ...rest } = props;
           return (
             <div
               key={key}
               {...rest}
-              className="w-3 h-3 ml-1 bg-white rounded-full shadow "
+              className="w-3 h-3 ml-1 bg-white rounded-full shadow"
             />
           );
         }}
       />
 
-      <div className="flex justify-between mt-2 ">
-        <span>{values[0]}</span>
-        <span>{values[1]}</span>
+      <div className="flex justify-between mt-2">
+        <span>₹{values[0]}</span>
+        <span>₹{values[1]}</span>
       </div>
     </div>
   );

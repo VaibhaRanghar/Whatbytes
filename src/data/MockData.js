@@ -1,0 +1,73 @@
+const products = [
+  {
+    id: 1,
+    title: "Smartphone X Pro",
+    category: "Electronics",
+    price: 899.99,
+    image: "https://dummyimage.com/200x200/000/fff&text=Phone",
+  },
+  {
+    id: 2,
+    title: "Wireless Headphones",
+    category: "Electronics",
+    price: 129.99,
+    image: "https://dummyimage.com/200x200/111/fff&text=Headphones",
+  },
+  {
+    id: 3,
+    title: "Men's Cotton Shirt",
+    category: "Clothing",
+    price: 29.99,
+    image: "https://dummyimage.com/200x200/222/fff&text=Shirt",
+  },
+  {
+    id: 4,
+    title: "Women's Summer Dress",
+    category: "Clothing",
+    price: 49.99,
+    image: "https://dummyimage.com/200x200/333/fff&text=Dress",
+  },
+  {
+    id: 5,
+    title: "Wooden Dining Table",
+    category: "Home",
+    price: 299.99,
+    image: "https://dummyimage.com/200x200/444/fff&text=Table",
+  },
+  {
+    id: 6,
+    title: "LED Floor Lamp",
+    category: "Home",
+    price: 59.99,
+    image: "https://dummyimage.com/200x200/555/fff&text=Lamp",
+  },
+  {
+    id: 7,
+    title: "Gaming Laptop",
+    category: "Electronics",
+    price: 1499.99,
+    image: "https://dummyimage.com/200x200/666/fff&text=Laptop",
+  },
+  {
+    id: 8,
+    title: "Comfy Sofa Set",
+    category: "Home",
+    price: 799.99,
+    image: "https://dummyimage.com/200x200/777/fff&text=Sofa",
+  },
+  {
+    id: 9,
+    title: "Women's Leather Handbag",
+    category: "Clothing",
+    price: 89.99,
+    image: "https://dummyimage.com/200x200/888/fff&text=Bag",
+  },
+  {
+    id: 10,
+    title: "Bluetooth Speaker",
+    category: "Electronics",
+    price: 39.99,
+    image: "https://dummyimage.com/200x200/999/fff&text=Speaker",
+  },
+];
+export default products;

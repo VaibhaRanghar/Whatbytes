@@ -8,25 +8,39 @@ export interface Product {
   id: number;
   title: string;
   price: number;
-  images: string[];
+  image: string;
+  category: string;
 }
 
 function ProductCard({ product }: { product: Product }) {
-  const { addToCart } = useCart();
-  const { title, price, images } = product;
+  const { addToCart, cart, deleteCartItem } = useCart();
+  const { title, price, image, id } = product;
+  const isInCart = cart.some((item: Product) => item.id === id);
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    if (isInCart) {
+      deleteCartItem(id);
+    } else {
+      addToCart(product);
+    }
+  };
   return (
     <div className="rounded-md p-2 bg-slate-50 m-2 hover:scale-110 transition-all duration-300 ease-in-out ">
       <Link href={"#"} className="flex flex-col justify-between min-h-full">
         <div>
-          <Image src={images[0]} alt="Product Image" height={200} width={200} />
-          <p className="text-wrap">{title}</p>
-          <p>${price}</p>
+          <Image src={image} alt="Product Image" height={300} width={300} />
+          <p className="text-wrap font-semibold">{title}</p>
+          <p className="font-bold text-lg">${price}</p>
         </div>
         <button
-          onClick={() => addToCart(product)}
-          className="px-3 py-2 bg-blue-900 text-white rounded-md align-bottom"
+          onClick={handleClick}
+          className={`mt-3 px-3 py-2 rounded-md text-white ${
+            isInCart
+              ? "bg-green-600 hover:bg-red-600"
+              : "bg-blue-900 hover:bg-blue-600"
+          }`}
         >
-          Add to Cart
+          {isInCart ? "Added" : "Add to Cart"}
         </button>
       </Link>
     </div>
