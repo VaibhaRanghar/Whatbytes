@@ -24,3 +24,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+h1{
+  @apply font-bold text-3xl
+}
+
+header{
+  @apply flex justify-around items-center p-3 bg-blue-800 text-white
+}
