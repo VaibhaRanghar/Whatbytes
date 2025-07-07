@@ -29,13 +29,13 @@ export default function PriceSlider() {
       <Range
         step={10}
         min={0}
-        max={10000}
+        max={1000}
         values={values}
         onChange={(newValues) => setValues(newValues as [number, number])}
         renderTrack={({ props, children }) => (
           <div
             {...props}
-            className="h-1 min-w-40 ml-1 bg-blue-200 rounded relative"
+            className="h-1 min-w-30 sm:min-w-40 ml-1 bg-blue-200 rounded relative"
             style={{ ...props.style }}
           >
             {children}

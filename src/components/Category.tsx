@@ -39,7 +39,7 @@ function Category({
 
   return (
     <form
-      className={`min-w-40 flex flex-col gap-2 items-start ${
+      className={`flex flex-col gap-2 items-start ${
         type?.bg === "light" ? "bg-white" : ""
       } ${type?.text === "light" ? "text-white" : "text-black"}`}
     >

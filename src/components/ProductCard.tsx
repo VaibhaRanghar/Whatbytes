@@ -1,49 +1,41 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-
-import { useCart } from "@/context/CartContext";
+import AddToCart from "./AddToCart";
 
 export interface Product {
   id: number;
   title: string;
   price: number;
   image: string;
+  description: string;
   category: string;
+  quantity?: number;
 }
 
 function ProductCard({ product }: { product: Product }) {
-  const { addToCart, cart, deleteCartItem } = useCart();
-  const { title, price, image, id } = product;
-  const isInCart = cart.some((item: Product) => item.id === id);
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault(); 
-    if (isInCart) {
-      deleteCartItem(id);
-    } else {
-      addToCart(product);
-    }
-  };
+  const { title, price, image } = product;
   return (
-    <div className="rounded-md p-2 bg-slate-50 m-2 hover:scale-110 transition-all duration-300 ease-in-out ">
-      <Link href={"#"} className="flex flex-col justify-between min-h-full">
-        <div>
-          <Image src={image} alt="Product Image" height={300} width={300} />
-          <p className="text-wrap font-semibold">{title}</p>
-          <p className="font-bold text-lg">${price}</p>
-        </div>
-        <button
-          onClick={handleClick}
-          className={`mt-3 px-3 py-2 rounded-md text-white ${
-            isInCart
-              ? "bg-green-600 hover:bg-red-600"
-              : "bg-blue-900 hover:bg-blue-600"
-          }`}
-        >
-          {isInCart ? "Added" : "Add to Cart"}
-        </button>
-      </Link>
-    </div>
+    <Link
+      href={`/product/${product.id}`}
+      className="group flex flex-col justify-between bg-white rounded-lg shadow hover:shadow-lg transition duration-300 p-4"
+    >
+      <Image
+        src={image}
+        alt={title}
+        width={300}
+        height={300}
+        className="object-cover rounded-lg mb-4 w-full h-48"
+      />
+
+      <div className="flex flex-col gap-1">
+        <p className="font-semibold text-sm text-slate-700 line-clamp-2">
+          {title}
+        </p>
+        <p className="font-bold text-blue-900 text-lg">${price}</p>
+        <AddToCart product={product} />
+      </div>
+    </Link>
   );
 }
 

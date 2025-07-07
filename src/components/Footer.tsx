@@ -3,27 +3,33 @@ import { FaInstagram } from "react-icons/fa6";
 
 function Footer() {
   return (
-    <footer className="p-5 px-10 bg-blue-950 text-white text-sm">
-      <div className="flex justify-between text-left ">
-        <div className="flex flex-col gap-3">
-          <h2>Filters</h2>
-          <span>All&emsp;ElEZronk</span>
+    <footer className="bg-blue-950 text-white text-sm px-6 py-8">
+      <div className="max-w-6xl mx-auto grid sm:pl-32 grid-cols-2 md:grid-cols-3">
+        <div className="space-y-3">
+          <h2 className="font-semibold text-white text-lg">Filters</h2>
+          <p className="text-slate-300">All ElEZronk</p>
         </div>
-        <div className="flex flex-col justify-between gap-3">
-          <h2>About Us</h2>
-          <span>About us</span>
-          <span>Contact</span>
+
+        <div className="space-y-3">
+          <h2 className="font-semibold text-white text-lg">About Us</h2>
+          <ul className="space-y-1 text-slate-300">
+            <li>About us</li>
+            <li>Contact</li>
+          </ul>
         </div>
-        <div>
-          <h2>Follow Us</h2>
-          <div className="flex gap-3 pt-4">
-            <FaFacebook size={25} />
-            <FaTwitter size={25} />
-            <FaInstagram size={25} />
+
+        <div className="space-y-3">
+          <h2 className="font-semibold text-white text-lg">Follow Us</h2>
+          <div className="flex gap-4 pt-1">
+            <FaFacebook size={20} className="hover:text-blue-400 transition" />
+            <FaTwitter size={20} className="hover:text-sky-400 transition" />
+            <FaInstagram size={20} className="hover:text-pink-400 transition" />
           </div>
         </div>
       </div>
-      <p className="">&copy;2024 American</p>
+      <div className="pt-8 sm:max-w-6xl sm:m-auto sm:pl-32 text-slate-400 text-xs">
+        &copy; 2024 American.
+      </div>
     </footer>
   );
 }

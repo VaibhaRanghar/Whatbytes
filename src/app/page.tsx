@@ -3,13 +3,13 @@ import Sidebar from "@/components/Sidebar";
 
 export default async function Home() {
   return (
-    <div className="max-w-7xl mx-auto ">
-      <div className="grid grid-cols-[auto_1fr] min-h-screen text-white">
+    <main className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 py-6">
+      <div className="flex flex-row gap-0 lg:gap-6">
         <Sidebar />
-        <section className="">
+        <section className="flex-1">
           <ProductsListing />
         </section>
       </div>
-    </div>
+    </main>
   );
 }
